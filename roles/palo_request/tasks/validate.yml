@@ -1,0 +1,15 @@
+- name: Validate required fields
+  assert:
+    that:
+      - source_ip is defined
+      - destination_ip is defined
+      - source_zone is defined
+      - destination_zone is defined
+      - rule_name is defined
+    fail_msg: "Missing required request fields"
+    
+- name: Validate IP format (simple check)
+  assert:
+    that:
+      - source_ip is match("^[0-9.]+$")
+      - destination_ip is match("^[0-9.]+$")

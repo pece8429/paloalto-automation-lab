@@ -1,0 +1,3 @@
+- name: Commit configuration
+  paloaltonetworks.panos.panos_commit:
+    provider: "{{ provider }}"

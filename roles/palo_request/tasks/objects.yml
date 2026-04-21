@@ -1,0 +1,13 @@
+- name: Create source address object
+  paloaltonetworks.panos.panos_address_object:
+    provider: "{{ provider }}"
+    name: "SRC_{{ source_ip }}"
+    value: "{{ source_ip }}"
+    description: "Created by automation"
+    
+- name: Create destination address object
+  paloaltonetworks.panos.panos_address_object:
+    provider: " {{ provider }}"
+    name: "DST_{{ destination_ip }}"
+    value: "{{ destination_ip }}"
+    description: "Created by automation"

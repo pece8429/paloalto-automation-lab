@@ -1,0 +1,11 @@
+{
+  "request_id": "REQ1011",
+  "source_zone": "trust",
+  "destination_zone": "untrust",
+  "source_ip": "10.10.10.10",
+  "destination_ip": "172.16.1.20",
+  "application": "tcp-443",
+  "rule_action": "allow",
+  "rule_name": "ALLOW_WEB_TRAFFIC",
+  "description": "Allow outbound HTTPS"
+}

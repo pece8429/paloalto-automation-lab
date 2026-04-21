@@ -1,0 +1,22 @@
+- name: Verify rule exists
+  paloaltonetworks.panos.panos_security_rule_facts:
+    provider: "{{ provider }}"
+    rule_name: "{{ rule_name }}"
+  register: rule_check
+  
+- name: Fail if rule not found
+  fail:
+    msg: "Rule was not successfully created"
+  when: rule_check.gathered | length == 0
+  
+- name: Write audit log
+  copy:
+    dest: "{{ playbook_dir }}/../reports/{{ request_id }}.json"
+    content: |
+      {
+        "request_id": "{{ request_id }}",
+        "rule_name": "{{ rule_name }}",
+        "status": "SUCCESS",
+        "timestamp": "{{ ansible_date_time.iso8601 }}"
+      }
+  delegate_to: localhost

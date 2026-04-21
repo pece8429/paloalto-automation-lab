@@ -1,0 +1,12 @@
+- name: Create or update security rule
+  paloaltonetworks.panos.panos_security_rule:
+    provider: "{{ provider }}"
+    rule_name: "{{ rule_name }}"
+    description: "{{ description }}"
+    source_zone: ["{{ source_zone }}"]
+    destination_zone: ["{{ destination_zone }}"]
+    source_ip: ["SRC_{{ source_ip }}"]
+    destination_ip: ["DST_{{ destination_ip }}"]
+    application: ["any"]
+    service: ["{{ application }}"]
+    action: "{{ rule_action }}"
