@@ -1,13 +1,53 @@
-- name: Create source address object
+---
+- name: Ensure reports directory exists
+  file:
+    path: "{{ playbook_dir }}/../reports"
+    state: directory
+    mode: '0755'
+  delegate_to: localhost
+  run_once: true
+    
+
+- name: Create source address object on Palo Alto
   paloaltonetworks.panos.panos_address_object:
     provider: "{{ provider }}"
     name: "SRC_{{ source_ip }}"
     value: "{{ source_ip }}"
     description: "Created by automation"
+  when: not (mock_mode | default(true) | bool)
+
+- name: Simulate source address object creation
+  copy:
+    dest: "{{ playbook_dir }}/../reports/{{ request_id }}_source_object.json"
+    content: |
+      {
+        "object_type": "address",
+        "name": "SRC_{{ source_ip }}",
+        "value": "{{ source_ip }}",
+        "description": "Created by automation",
+        "status": "SIMULATED_SUCCESS"
+      }
+  delegate_to: localhost
+  when: mock_mode | default(true) | bool
     
-- name: Create destination address object
+- name: Create destination address object on Palo Alto
   paloaltonetworks.panos.panos_address_object:
     provider: " {{ provider }}"
     name: "DST_{{ destination_ip }}"
     value: "{{ destination_ip }}"
     description: "Created by automation"
+  when: not (mock_mode | default(true) | bool)
+  
+- name: Simulate destination address object creation
+  copy:
+    dest: "{{ playbook_dir }}/../reports/{{ request_id }}_destination_object.json"
+    content: |
+      {
+        "object_type": "address",
+        "name": "DST_{{ destination_ip }}",
+        "value": "{{ destination_ip }}",
+        "description": "Created by automation",
+        "status": "SIMULATED_SUCCESS"
+      }
+  delegate_to: localhost
+  when: mock_mode | default(true) | bool

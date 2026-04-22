@@ -1,0 +1,1 @@
+{"request_id": "REQ1011", "rule_name": "ALLOW_WEB_TRAFFIC", "status": "SUCCESS", "mode": "MOCK", "timestamp": "2026-04-22T04:16:15Z", "device": "pa-fw-01", "source_ip": "10.10.10.10", "destination_ip": "172.16.1.20", "action": "allow"}

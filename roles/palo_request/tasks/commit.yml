@@ -1,3 +1,16 @@
 - name: Commit configuration
   paloaltonetworks.panos.panos_commit:
     provider: "{{ provider }}"
+  when: not (mock_mode | default(true) | bool)
+  
+- name: Simulate commit step
+  copy:
+    dest: "{{ playbook_dir }}/../reports/{{ request_id }}_commit.json"
+    content: |
+      {
+        "request_id": "{{ request_id }}",
+        "commit_status": "SIMULATED",
+        "status": "SUCCESS"
+      }
+  delegate_to: localhost
+  when: mock_mode | default(true) | bool

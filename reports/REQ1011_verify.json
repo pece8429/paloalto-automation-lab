@@ -1,0 +1,5 @@
+{
+  "request_id": "REQ1011",
+  "rule_name": "ALLOW_WEB_TRAFFIC",
+  "verification": "SIMULATED_SUCCESS
+}

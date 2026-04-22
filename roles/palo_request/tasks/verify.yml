@@ -1,22 +1,42 @@
-- name: Verify rule exists
+- name: Verify rule exists on Palo Alto
   paloaltonetworks.panos.panos_security_rule_facts:
     provider: "{{ provider }}"
     rule_name: "{{ rule_name }}"
   register: rule_check
+  when: not (mock_mode | default(true) | bool)
   
-- name: Fail if rule not found
+- name: Fail if rule not found on Palo Alto
   fail:
     msg: "Rule was not successfully created"
-  when: rule_check.gathered | length == 0
-  
+  when: 
+    - not (mock_mode | default(true) | bool)
+    - rule_check.gathered is not defined or rule_check.gathered | length == 0
+    
+- name: Simulate post_check
+  copy:
+    dest: "{{ playbook_dir }}/../reports/{{ request_id }}_verify.json"
+    content: |
+      {
+        "request_id": "{{ request_id }}",
+        "rule_name": "{{ rule_name }}",
+        "verification": "SIMULATED_SUCCESS
+      }
+  delegate_to: localhost
+  when: mock_mode | default(true) | bool
+        
 - name: Write audit log
   copy:
-    dest: "{{ playbook_dir }}/../reports/{{ request_id }}.json"
+    dest: "{{ playbook_dir }}/../reports/{{ request_id }}_audit.json"
     content: |
       {
         "request_id": "{{ request_id }}",
         "rule_name": "{{ rule_name }}",
         "status": "SUCCESS",
-        "timestamp": "{{ ansible_date_time.iso8601 }}"
+        "mode": "{{ 'MOCK' if (mock_mode | default(true) | bool) else 'REAL' }}",
+        "timestamp": "{{ ansible_date_time.iso8601 }}",
+        "device": "{{ inventory_hostname }}",
+        "source_ip": "{{ source_ip }}",
+        "destination_ip": "{{ destination_ip }}",
+        "action": "{{ rule_action }}"
       }
   delegate_to: localhost

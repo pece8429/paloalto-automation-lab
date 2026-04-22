@@ -1,0 +1,10 @@
+{
+ "rule_name": "ALLOW_WEB_TRAFFIC",
+ "description": "trust",
+ "destination_zone": "untrust",
+ "source_ip_object": "SRC_10.10.10.10",
+ "destination_ip_object": "DST_172.16.1.20",
+ "service:" "tcp-443",
+ "action": "allow",
+ "status": "SIMULATED_SUCCESS"
+}

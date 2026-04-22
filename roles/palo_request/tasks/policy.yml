@@ -1,4 +1,5 @@
-- name: Create or update security rule
+---
+- name: Create or update security rule on Palo Alto
   paloaltonetworks.panos.panos_security_rule:
     provider: "{{ provider }}"
     rule_name: "{{ rule_name }}"
@@ -10,3 +11,21 @@
     application: ["any"]
     service: ["{{ application }}"]
     action: "{{ rule_action }}"
+  when: not (mock_mode | default(true) | bool)
+  
+- name: Simulate security rule creation
+  copy:
+    dest: "{{ playbook_dir }}/../reports/{{ request_id }}_rule.json"
+    content: |
+      {
+       "rule_name": "{{ rule_name }}",
+       "description": "{{ source_zone }}",
+       "destination_zone": "{{ destination_zone }}",
+       "source_ip_object": "SRC_{{ source_ip }}",
+       "destination_ip_object": "DST_{{ destination_ip }}",
+       "service:" "{{ application }}",
+       "action": "{{ rule_action }}",
+       "status": "SIMULATED_SUCCESS"
+      }
+  delegate_to: localhost
+  when: mock_mode | default(true) | bool
